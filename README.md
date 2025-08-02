@@ -60,16 +60,13 @@ Launch the instance.
 
 2️⃣ Create IAM User for CLI
 Steps:
-
-IAM Console → Users → Add user
-
-User name: eks-admin
-
-Access type: Programmatic access
-
-Attach policy: AdministratorAccess
+-> IAM Console → Users → Add user
+-> User name: eks-admin
+-> Access type: Programmatic access
+-> Attach policy: AdministratorAccess
 
 Save Access Key ID & Secret Key
+
 
 3️⃣ Configure AWS CLI on Bastion
 SSH to bastion:
@@ -82,12 +79,14 @@ unzip awscliv2.zip
 sudo ./aws/install
 aws --version
 
+
 aws configure
 4️⃣ Install kubectl
 curl -o kubectl https://amazon-eks.s3.ap-south-1.amazonaws.com/1.30.0/2024-04-19/bin/linux/amd64/kubectl
 chmod +x kubectl
 sudo mv kubectl /usr/local/bin/
 kubectl version --client
+
 
 5️⃣ Install eksctl
 curl --silent --location "https://github.com/eksctl-io/eksctl/releases/download/v0.212.0/eksctl_Linux_amd64.tar.gz" | tar xz -C /tmp
@@ -100,12 +99,14 @@ eksctl create cluster \
   --region=ap-south-1 \
   --zones=ap-south-1a,ap-south-1b \
   --without-nodegroup
+
   
 7️⃣ Associate OIDC Provider
 eksctl utils associate-iam-oidc-provider \
   --region ap-south-1 \
   --cluster eksdemo \
   --approve
+
   
 8️⃣ Create Spot NodeGroup
 eksctl create nodegroup \
@@ -159,5 +160,6 @@ eksctl delete cluster --name=eksdemo --region=ap-south-1
 Delete unattached EBS:
 VOLUMES=$(aws ec2 describe-volumes --region ap-south-1 --query "Volumes[?State=='available'].VolumeId" --output text)
 for vol in $VOLUMES; do
-  aws ec2 delete-volume --volume-id $vol --region ap-south-1
-done
+aws ec2 delete-volume --volume-id $vol --region ap-south-1
+
+Done
